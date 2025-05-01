@@ -18,7 +18,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(640, 480, "Window", NULL, NULL);
+	window = glfwCreateWindow(1080, 720, "Window", NULL, NULL);
 
 	if (!window)
 	{
@@ -34,6 +34,22 @@ void Application::Init()
 		std::cerr << "[INIT] GLAD init failed" << std::endl;
 		return;
 	}
+
+	testShader = Shader("Resources/Shaders/TestShader/testShader.vs", "Resources/Shaders/TestShader/testShader.fs");
+
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+	glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*) 0);
+	glEnableVertexAttribArray(0);
 
 	Mainloop();
 }
@@ -62,6 +78,13 @@ void Application::Update()
 void Application::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	testShader.useShader();
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glfwSwapBuffers(window);
 }
