@@ -1,8 +1,9 @@
 #pragma once
 
-#include <windows.h>
-#include <gl/gl.h>
+#include <glad/glad.h>
 #include <glfw3.h>
+
+#include <iostream>
 
 class Application
 {
