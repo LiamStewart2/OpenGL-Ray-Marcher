@@ -81,6 +81,8 @@ void Application::Render()
 
 	testShader.useShader();
 
+	testShader.setFloat("timePassed", glfwGetTime());
+
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
